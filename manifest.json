@@ -5,6 +5,6 @@
   "description": "This extension is used to type Armenian words by their pronunciation in Google Translator",
   "version": "1.0",
 
-  "content_scripts": [
+  "content_scripts":
     { "matches": ["https://translate.google.com*"], "js": ["content.js"] }
 }
