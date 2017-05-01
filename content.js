@@ -3,12 +3,12 @@ var en2hy = {
   b : '\u0562',
   c : '\u0581',
   d : '\u0564',
-  e : '\u0567',
+  e : '\u0565',
   f : '\u0586',
   g : '\u0563',
   h : '\u0570',
   i : '\u056B',
-  j : '\u057B',
+  j : '\u0575',
   k : '\u056F',
   l : '\u056C',
   m : '\u0574',
@@ -19,12 +19,26 @@ var en2hy = {
   r : '\u057C',
   s : '\u057D',
   t : '\u057F',
-  u : '\u0578\u0582',
+  u : '\u0582',
   v : '\u057E',
   w : '\u0578',
-  x : '\u056D',
-  y : '\u0575',
-  z : '\u0566'
+  x : '\u0572',
+  y : '\u0568',
+  z : '\u0566',
+  1 : '\u0567',
+  2 : '\u0569',
+  3 : '\u0583',
+  4 : '\u0571',
+  5 : '\u057B',
+  6 : '\u0582',
+  7 : '\u0587',
+  8 : '\u0580',
+  9 : '\u0579',
+  0 : '\u0573',
+  '=' : '\u056A',
+  '[' : '\u056D',
+  ']' : '\u056E',
+  '\\' : '\u0577'
 };
 
 var sourceTarget2Mapping  = {
@@ -35,28 +49,11 @@ function getSourceLanguage() {
     return (document.getElementById("gt-sl-sugg").getElementsByClassName("jfk-button-checked"))[0].getAttribute("value");
 }
 
-function getTargetLanguage() {
-    return (document.getElementById("gt-tl-sugg").getElementsByClassName("jfk-button-checked"))[0].getAttribute("value");
-}
-
-//function translateEnglish2ArmenianPhonetically(englishText) {
-//    var ret = "";
-//    for (var i = 0; i < englishText.length; ++i) {
-//        var temp = englishText[i];
-//        if (temp >= 'a' && temp <= 'z') {
-//            ret += en2hy[temp];
-//        } else {
-//            ret += temp;
-//        }
-//    }
-//    return ret;
-//}
-
 function translate(source) {
     var ret = "";
     var srcLang = getSourceLanguage();
     var mapping = sourceTarget2Mapping["en"][srcLang];
-    if (mapping === "undefined") return source;
+    if (mapping === undefined) return source;
     for (var i = 0; i < source.length; ++i) {
         var temp = source[i];
         var temp1 = mapping[temp];
@@ -68,12 +65,6 @@ function translate(source) {
     }
     return ret;
 }
-
-//function googleTranslateEn2Hy() {
-//    var source = document.getElementById("source");
-//    var temp = source.value;
-//    source.value = translateEnglish2ArmenianPhonetically(temp); 
-//}
 
 function googleTranslate() {
     var source = document.getElementById("source");
