@@ -27,12 +27,41 @@ var en2hy = {
   z : '\u0566'
 };
 
-function translateEnglish2ArmenianPhonetically(englishText) {
+var sourceTarget2Mapping  = {
+  en : { hy : en2hy }
+};
+
+function getSourceLanguage() {
+    return (document.getElementById("gt-sl-sugg").getElementsByClassName("jfk-button-checked"))[0].getAttribute("value");
+}
+
+function getTargetLanguage() {
+    return (document.getElementById("gt-tl-sugg").getElementsByClassName("jfk-button-checked"))[0].getAttribute("value");
+}
+
+//function translateEnglish2ArmenianPhonetically(englishText) {
+//    var ret = "";
+//    for (var i = 0; i < englishText.length; ++i) {
+//        var temp = englishText[i];
+//        if (temp >= 'a' && temp <= 'z') {
+//            ret += en2hy[temp];
+//        } else {
+//            ret += temp;
+//        }
+//    }
+//    return ret;
+//}
+
+function translate(source) {
     var ret = "";
-    for (var i = 0; i < englishText.length; ++i) {
-        var temp = englishText[i];
-        if (temp >= 'a' && temp <= 'z') {
-            ret += en2hy[temp];
+    var srcLang = getSourceLanguage();
+    var mapping = sourceTarget2Mapping["en"][srcLang];
+    if (mapping === "undefined") return source;
+    for (var i = 0; i < source.length; ++i) {
+        var temp = source[i];
+        var temp1 = mapping[temp];
+        if (!(temp1 === undefined)) {
+            ret += temp1;
         } else {
             ret += temp;
         }
@@ -40,15 +69,21 @@ function translateEnglish2ArmenianPhonetically(englishText) {
     return ret;
 }
 
-function googleTranslateEn2Hy() {
+//function googleTranslateEn2Hy() {
+//    var source = document.getElementById("source");
+//    var temp = source.value;
+//    source.value = translateEnglish2ArmenianPhonetically(temp); 
+//}
+
+function googleTranslate() {
     var source = document.getElementById("source");
     var temp = source.value;
-    source.value = translateEnglish2ArmenianPhonetically(temp); 
+    source.value = translate(temp); 
 }
 
 function sourceOnInput() {
     var source = document.getElementById("source");
-    source.oninput = googleTranslateEn2Hy;
+    source.oninput = googleTranslate;
 }
 
 document.addEventListener("DOMContentLoaded", sourceOnInput);
