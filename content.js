@@ -1,80 +1,52 @@
-var en2hy = {
-  a : '\u0561', 
-  b : '\u0562',
-  c : '\u0581',
-  d : '\u0564',
-  e : '\u0565',
-  f : '\u0586',
-  g : '\u0563',
-  h : '\u0570',
-  i : '\u056B',
-  j : '\u0575',
-  k : '\u056F',
-  l : '\u056C',
-  m : '\u0574',
-  n : '\u0576',
-  o : '\u0578',
-  p : '\u057A',
-  q : '\u0584',
-  r : '\u057C',
-  s : '\u057D',
-  t : '\u057F',
-  u : '\u0582',
-  v : '\u057E',
-  w : '\u0578',
-  x : '\u0572',
-  y : '\u0568',
-  z : '\u0566',
-  1 : '\u0567',
-  2 : '\u0569',
-  3 : '\u0583',
-  4 : '\u0571',
-  5 : '\u057B',
-  6 : '\u0582',
-  7 : '\u0587',
-  8 : '\u0580',
-  9 : '\u0579',
-  0 : '\u0573',
-  '=' : '\u056A',
-  '[' : '\u056D',
-  ']' : '\u056E',
-  '\\' : '\u0577'
-};
+var keyCode2Letter = [];
+keyCode2Letter[ 65] = '\u0561'; keyCode2Letter[ 66] = '\u0562';
+keyCode2Letter[ 67] = '\u0581'; keyCode2Letter[ 68] = '\u0564';
+keyCode2Letter[ 69] = '\u0565'; keyCode2Letter[ 70] = '\u0586';
+keyCode2Letter[ 71] = '\u0563'; keyCode2Letter[ 72] = '\u0570';
+keyCode2Letter[ 73] = '\u056B'; keyCode2Letter[ 74] = '\u0575';
+keyCode2Letter[ 75] = '\u056F'; keyCode2Letter[ 76] = '\u056C';
+keyCode2Letter[ 77] = '\u0574'; keyCode2Letter[ 78] = '\u0576';
+keyCode2Letter[ 79] = '\u0578'; keyCode2Letter[ 80] = '\u057A';
+keyCode2Letter[ 81] = '\u0584'; keyCode2Letter[ 82] = '\u057C';
+keyCode2Letter[ 83] = '\u057D'; keyCode2Letter[ 84] = '\u057F';
+keyCode2Letter[ 85] = '\u0582'; keyCode2Letter[ 86] = '\u057E';
+keyCode2Letter[ 87] = '\u0578'; keyCode2Letter[ 88] = '\u0572';
+keyCode2Letter[ 89] = '\u0568'; keyCode2Letter[ 90] = '\u0566';
+keyCode2Letter[ 49] = '\u0567'; keyCode2Letter[ 50] = '\u0569';
+keyCode2Letter[ 51] = '\u0583'; keyCode2Letter[ 52] = '\u0571';
+keyCode2Letter[ 53] = '\u057B'; keyCode2Letter[ 54] = '\u0582';
+keyCode2Letter[ 55] = '\u0587'; keyCode2Letter[ 56] = '\u0580';
+keyCode2Letter[ 57] = '\u0579'; keyCode2Letter[ 48] = '\u0573';
+keyCode2Letter[187] = '\u056A'; keyCode2Letter[219] = '\u056D';
+keyCode2Letter[221] = '\u056E'; keyCode2Letter[220] = '\u0577';
 
-var sourceTarget2Mapping  = {
-  en : { hy : en2hy }
-};
+var lang2KeyboardLayout = { "hy" : keyCode2Letter };
 
 function getSourceLanguage() {
-    return (document.getElementById("gt-sl-sugg").getElementsByClassName("jfk-button-checked"))[0].getAttribute("value");
+    return (document.getElementById("gt-sl-sugg").
+        getElementsByClassName("jfk-button-checked"))[0].
+        getAttribute("value");
 }
 
-function translate(source) {
-    var ret = "";
+function convertLastTypedSymbol(source, event) {
     var srcLang = getSourceLanguage();
-    var mapping = sourceTarget2Mapping["en"][srcLang];
+    var mapping = lang2KeyboardLayout[srcLang];
     if (mapping === undefined) return source;
-    for (var i = 0; i < source.length; ++i) {
-        var temp = source[i];
-        var temp1 = mapping[temp];
-        if (!(temp1 === undefined)) {
-            ret += temp1;
-        } else {
-            ret += temp;
-        }
-    }
-    return ret;
+    var lastCharMapped = mapping[event.keyCode];
+    if (lastCharMapped == undefined) return source;
+    event.preventDefault();
+    return source + lastCharMapped;
 }
 
-function googleTranslate() {
+function sourceOnKeyDownEventHandler(event) {
     var source = document.getElementById("source");
-    var temp = source.value;
-    source.value = translate(temp); 
+    var currentSourceValue = source.value;
+    source.value = convertLastTypedSymbol(currentSourceValue, event);
 }
 
-function sourceOnInput() {
+function registerSourceOnKeyDownEventHandler() {
     var source = document.getElementById("source");
-    source.oninput = googleTranslate;
+    source.onkeydown=sourceOnKeyDownEventHandler;
 }
 
-document.addEventListener("DOMContentLoaded", sourceOnInput);
+document.addEventListener("DOMContentLoaded", registerSourceOnKeyDownEventHandler);
