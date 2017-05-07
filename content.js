@@ -34,8 +34,10 @@ function convertLastTypedSymbol(source, event) {
     if (mapping === undefined) return source;
     var lastCharMapped = mapping[event.keyCode];
     if (lastCharMapped == undefined) return source;
+    if (event.altKey || event.ctrlKey) return source;
+    var isUpper = event.shiftKey;
     event.preventDefault();
-    return source + lastCharMapped;
+    return source + (isUpper ? lastCharMapped.toUpperCase() : lastCharMapped);
 }
 
 function sourceOnKeyDownEventHandler(event) {
